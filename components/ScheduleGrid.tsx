@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Task, User } from '@/lib/types'
 import TaskCard from './TaskCard'
 import { format, addHours, startOfDay } from 'date-fns'
@@ -57,9 +58,8 @@ export default function ScheduleGrid({
                         ))}
 
                         {displayUsers.map((user) => (
-                            <>
+                            <React.Fragment key={user.id}>
                                 <div
-                                    key={`user-${user.id}`}
                                     className="bg-white dark:bg-gray-800 p-4 font-medium text-gray-900 dark:text-white sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700"
                                 >
                                     <div className="flex items-center space-x-2">
@@ -86,7 +86,7 @@ export default function ScheduleGrid({
                                         </div>
                                     )
                                 })}
-                            </>
+                            </React.Fragment>
                         ))}
                     </div>
                 </div>

@@ -126,7 +126,13 @@ export default function TaskFormModal({
                         <input
                             type="text"
                             value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, title: e.target.value })
+                                // Clear error when user types
+                                if (errors.title && e.target.value.trim()) {
+                                    setErrors({ ...errors, title: '' })
+                                }
+                            }}
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter task title"
                         />
@@ -156,7 +162,13 @@ export default function TaskFormModal({
                             <input
                                 type="time"
                                 value={formData.start_time}
-                                onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, start_time: e.target.value })
+                                    // Clear end_time error when start time changes
+                                    if (errors.end_time) {
+                                        setErrors({ ...errors, end_time: '' })
+                                    }
+                                }}
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -167,7 +179,13 @@ export default function TaskFormModal({
                             <input
                                 type="time"
                                 value={formData.end_time}
-                                onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, end_time: e.target.value })
+                                    // Clear error when user changes end time
+                                    if (errors.end_time) {
+                                        setErrors({ ...errors, end_time: '' })
+                                    }
+                                }}
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                             />
                             {errors.end_time && <p className="mt-1 text-sm text-red-600">{errors.end_time}</p>}

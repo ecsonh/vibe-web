@@ -142,6 +142,16 @@ export default function SchedulePage({
 
     const displayTasks = getTasksByDate(selectedDate)
 
+    // Sync selectedTask with store updates
+    useEffect(() => {
+        if (selectedTask) {
+            const updatedTask = tasks.find(t => t.id === selectedTask.id)
+            if (updatedTask && JSON.stringify(updatedTask) !== JSON.stringify(selectedTask)) {
+                setSelectedTask(updatedTask)
+            }
+        }
+    }, [tasks, selectedTask])
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -185,8 +195,15 @@ export default function SchedulePage({
                     users={users}
                     currentUser={user}
                     onClose={() => setSelectedTask(null)}
-                    onDelete={deleteTask}
-                    onUpdate={updateTask}
+                    onDelete={(id) => {
+                        deleteTask(id)
+                        setSelectedTask(null)
+                    }}
+                    onUpdate={(id, updates) => {
+                        updateTask(id, updates)
+                        // Update local selectedTask immediately for UI feedback
+                        setSelectedTask({ ...selectedTask, ...updates })
+                    }}
                 />
             )}
 

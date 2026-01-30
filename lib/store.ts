@@ -47,12 +47,34 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
     getTasksByDate: (date) => {
         return get().tasks.filter((task) => {
-            const taskDate = format(new Date(task.start_time), 'yyyy-MM-dd')
-            return taskDate === date
+            try {
+                // Validate task has start_time
+                if (!task.start_time) return false
+
+                // Parse and validate date
+                const taskStartDate = new Date(task.start_time)
+
+                // Check if date is valid
+                if (isNaN(taskStartDate.getTime())) return false
+
+                const taskDate = format(taskStartDate, 'yyyy-MM-dd')
+                return taskDate === date
+            } catch (error) {
+                // If date parsing fails, exclude this task
+                console.warn('Invalid date in task:', task.id, error)
+                return false
+            }
         })
     },
 
     getTasksByEmployee: (employeeId) => {
-        return get().tasks.filter((task) => task.assigned_to === employeeId)
+        return get().tasks.filter((task) => {
+            try {
+                return task.assigned_to === employeeId
+            } catch (error) {
+                console.warn('Error filtering task by employee:', task?.id, error)
+                return false
+            }
+        })
     },
 }))
